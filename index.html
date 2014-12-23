@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html ng-app="lottoryApp">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="public/css/amazeui.min.css">
+    <link rel="stylesheet" type="text/css" href="public/css/index.css">
+    <style type="text/css">
+        .ng-cloak {
+            display: none;
+        }
+    </style>
+</head>
+<body ng-cloak ng-controller="mainController">
+    <div class='title'>
+        <div class="titlepanel">
+            <span>抽奖程序</span>
+        </div>
+        <div class="menupanel">
+            <a href="#" ng-click="close()" title="close">
+                <span class="am-icon-close"></span>
+                <a href="javascript:void(0)" data-am-offcanvas="{target: '#menubar'}">
+                    <span class="am-icon-list"></span>
+                </a>
+            </a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="am-g">
+            <div class="am-u-lg-12">
+                <h1 class="center"> <strong ng-bind="current">一等奖</strong>
+                </h1>
+                <hr/>
+            </div>
+            <div class="am-u-lg-6">
+                <p>奖品</p>
+                <p>
+                    <img src="public/image/1/test.jpg" alt="一等奖" class="am-img-thumbnail am-radius"></div>
+            </p>
+            <div class="am-u-lg-6">
+                <h2  class="center lottory-name"> <strong show-name="isbegin" ng-model="winner">XXX</strong>
+                </h2>
+            </div>
+        </div>
+        <div class="am-g">
+            <div class="am-u-lg-12">
+                <p class="center">
+                    当前共有
+                    <span ng-bind="list.length">0</span>
+                    人参与抽奖。
+                    <button type="button" class="am-btn am-btn-danger am-btn-xs" ng-click="begin()" 
+                        ng-init="text='开始抽奖'" 
+                        ng-bind="text"></button>
+                </p>
+            </div>
+        </div>
+        <div class="am-g">
+            <div class="am-u-lg-12">
+                <h3>一等奖：</h3>
+                <p>
+                    <div class="winner-box" ng-cloak ng-repeat="name in winners[0]">
+                        <span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
+                        <a class="close" data-am-modal="{target: '#delete-confirm'}" ng-click="">
+                            <span class="am-icon-times"></span>
+                        </a>
+                    </div>
+                </p>
+                <hr/>
+                <h3>二等奖：</h3>
+                <p>
+                    <div class="winner-box" ng-cloak ng-repeat="name in winners[1]">
+                        <span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
+                        <a class="close" data-am-modal="{target: '#delete-confirm'}" ng-click="">
+                            <span class="am-icon-times"></span>
+                        </a>
+                    </div>
+                </p>
+                <hr/>
+                <h3>三等奖：</h3>
+                <p>
+                    <div class="winner-box" ng-cloak ng-repeat="name in winners[2]">
+                        <span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
+                        <a class="close" data-am-modal="{target: '#delete-confirm'}" ng-click="">
+                            <span class="am-icon-times"></span>
+                        </a>
+                    </div>
+                </p>
+                <hr/>
+            </div>
+        </div>
+    </div>
+    <div id="menubar" class="am-offcanvas">
+        <div class="amz-sidebar am-offcanvas-bar am-offcanvas-bar-flip">
+            <form class="am-form">
+                <fieldset>
+                    <legend>
+                        <small>导入抽奖名单</small>
+                    </legend>
+                    <div class="am-form-group">
+                        <input id="fileDialog" type="file" style="font-size:12px"/>
+                        <p class="am-form-help">请选择抽奖人名单</p>
+                        <button type="button" class="am-btn am-btn-danger am-btn-xs" ng-click="import()">导入</button>
+                    </div>
+                    <legend>
+                        <small>选择抽奖轮次</small>
+                    </legend>
+                    <div class="am-form-group">
+                        <input id="first" type="radio" class="ainput hidden" ng-model="current" value="1"/>
+                        <label for="first" class="alabel">一等奖</label>
+                        <input id="second" type="radio" class="ainput hidden"  ng-model="current" value="2"/>
+                        <label for="second" class="alabel">二等奖</label>
+                        <input id="three" type="radio" class="ainput hidden"  ng-model="current" value="3"/>
+                        <label for="three" class="alabel">三等奖</label>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="am-modal am-modal-alert" tabindex="-1" id="messagebox">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">提示</div>
+            <div class="am-modal-bd" ng-bind="message"></div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn">确定</span>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="public/js/amazeui.min.js"></script>
+    <script type="text/javascript" src="public/js/angular.min.js"></script>
+    <script type="text/javascript" src="apps/js/app.js"></script>
+    <script type="text/javascript" src="apps/js/service.js"></script>
+    <script type="text/javascript" src="apps/js/controller.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "lottry",
+  "main": "index.html",
+  "window": {
+    "title": "lottry",
+    "toolbar": true,
+    "frame": false,
+    "fullscreen": false,
+    "position": "center",
+    "width": 980,
+    "height": 700
+  }
+}
