@@ -71,7 +71,7 @@ angular.module('lottoryApp')
 			}
 
 			$scope.begin = function() {
-				if ($scope.isbegin && lottory.getCount() == 0) {
+				if (!$scope.isbegin && lottory.getCount() == 0) {
 					$scope.message = "请先导入抽奖名单";
 					$('#messagebox').modal();
 					return;
