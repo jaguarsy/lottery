@@ -3,7 +3,7 @@
   "main": "index.html",
   "window": {
     "title": "lottry",
-    "toolbar": true,
+    "toolbar": false,
     "frame": false,
     "fullscreen": false,
     "position": "center",

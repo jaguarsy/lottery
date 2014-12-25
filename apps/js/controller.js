@@ -88,7 +88,7 @@ angular.module('lottoryApp')
 			$scope.winners = lottery.getWinners();
 			$scope.current = 1;
 			$scope.awards = [];
-			
+
 
 			for (var i = 1; i <= 3; i++) {
 				var name = lottery.getAwards(i);
@@ -124,8 +124,6 @@ angular.module('lottoryApp')
 				$('#configbox').modal();
 			}
 
-			$scope.saveConfig = function(){
-
-			}
+			$scope.saveConfig = function() {}
 		}
 	])
