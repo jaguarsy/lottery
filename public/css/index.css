@@ -49,18 +49,23 @@
 	margin-top: 125px
 }
 
+.lottory-name strong{
+	padding: 5px 15px 10px 15px;
+	border: solid 1px #dddddd;
+}
+
 .winner-box{
 	background-color: #0e90d2;
-	width:auto;
+	width: auto;
 	display: inline-block;
+	padding: 0 5px 0 0;
+	margin-right: 10px;
 }
 
 .winner-box .close{
 	color: #ffffff;
 	cursor: pointer;
 	font-size: 5px;
-	float: right;
-	margin-right: 3px;
 }
 
 .hidden{
