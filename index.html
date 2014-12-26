@@ -26,7 +26,7 @@
             </a>
         </div>
     </div>
-    <div class="container">
+    <div class="am-container">
         <div class="am-g">
             <div class="am-u-lg-12">
                 <h1 class="center"> <strong show-award-class="current">一等奖</strong>
@@ -39,7 +39,7 @@
                     <span ng-bind="awards[current-1].name"></span>
                 </p>
                 <p>
-                    <img ng-src="{{awards[current-1].path}}" width="470" alt="一等奖" class="am-img-thumbnail am-radius"></div>
+                    <img ng-src="{{awards[current-1].path}}" style="max-height:360px" alt="一等奖" class="am-img-thumbnail am-radius"></div>
             </p>
             <div class="am-u-lg-6">
                 <h2 class="center lottory-name"> <strong show-name="isbegin" ng-model="winner">XXX</strong>
@@ -93,7 +93,7 @@
                 <fieldset>
                     <legend>
                         <small>导入抽奖名单</small>
-                        <a href="#" ng-click="config()">
+                        <a href="#" ng-click="openconfig()">
                             <small> <i class="am-icon-cog"></i>
                             </small>
                         </a>
@@ -139,18 +139,24 @@
         </div>
     </div>
     <div class="am-modal am-modal-prompt" tabindex="-1" id="configbox">
-  <div class="am-modal-dialog">
-    <div class="am-modal-hd">Amaze UI</div>
-    <div class="am-modal-bd">
-      来来来，吐槽点啥吧
-      <input type="text" class="am-modal-prompt-input">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">Amaze UI</div>
+            <div class="am-modal-bd">
+                一等奖
+                <input type="text" class="am-modal-prompt-input" ng-model="showconfig.defaultWinners[0]"/>
+                二等奖
+                <input type="text" class="am-modal-prompt-input" ng-model="showconfig.defaultWinners[1]"/>
+                三等奖
+                <input type="text" class="am-modal-prompt-input" ng-model="showconfig.defaultWinners[2]"/>
+                禁止获奖
+                <input type="text" class="am-modal-prompt-input" ng-model="showconfig.neverWin"/>
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel ng-click="cancelConfig()">取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm ng-click="saveConfig()">提交</span>
+            </div>
+        </div>
     </div>
-    <div class="am-modal-footer">
-      <span class="am-modal-btn" data-am-modal-cancel>取消</span>
-      <span class="am-modal-btn" data-am-modal-confirm>提交</span>
-    </div>
-  </div>
-</div>
     <script type="text/javascript" src="public/js/jquery.min.js"></script>
     <script type="text/javascript" src="public/js/amazeui.min.js"></script>
     <script type="text/javascript" src="public/js/angular.min.js"></script>

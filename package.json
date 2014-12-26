@@ -1,8 +1,8 @@
 {
-  "name": "lottry",
+  "name": "lottery",
   "main": "index.html",
   "window": {
-    "title": "lottry",
+    "title": "lottery",
     "toolbar": false,
     "frame": false,
     "fullscreen": false,

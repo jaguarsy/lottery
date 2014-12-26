@@ -9,17 +9,24 @@ angular.module('lottoryApp')
 	.factory('lottery', [function() {
 
 		var nameList,
+			name,
+			rand,
 			count = 0,
+			awardsPath = execPath + "/awards/",
+			configPath = execPath + "/config",
+			winnerindex = [],
 			winners = [
 				[],
 				[],
 				[]
 			],
-			winnerindex = [],
-			awardsPath = execPath + "/awards/",
-			configPath = execPath + "/config",
-			defaultWinner = [],
-			neverWinner = [];
+			neverWinners = [],
+			defaultWinners = [
+				[],
+				[],
+				[]
+			],
+			config;
 
 		var getFiles = function(dir) {
 			return fs.readdirSync(dir);
@@ -50,19 +57,39 @@ angular.module('lottoryApp')
 			},
 
 			getOneName: function() {
-				var rand = this.rand(count);
-				for (var i = 0; i < 10; i++) {
-					if (winnerindex.indexOf(nameList[rand]) < 0) {
-						return nameList[rand];
+				rand = this.rand(count);
+				for (var i = 0; i < 50; i++) {
+					name = nameList[rand];
+					if (winnerindex.indexOf(name) < 0 && //排除已获奖的人
+						config.n.indexOf(name) < 0) { //获奖人不在禁止获奖名单中
+						return name;
+					}
+					rand = this.rand(count);
+				}
+				return '';
+			},
+			//获取默认的winner
+			getDefaultName: function(aClass) {
+				for (var i = 0, len = config.d[aClass].length; i < len; i++) {
+					name = config.d[aClass][i];
+					if (!name || name.trim() == '') continue;
+					if (winnerindex.indexOf(name) < 0 && //排除已获奖的人
+						config.n.indexOf(name) < 0) { //获奖人不在禁止获奖名单中
+						return name;
 					}
 				}
-				rand = this.rand(count);
+				return undefined;
 			},
 
 			win: function(name, aClass) {
+				if (this.isEnd()) return;
 				winnerindex.push(name);
 				winners[aClass].push(name);
 				return winners;
+			},
+
+			isEnd: function() {
+				return (+winnerindex.length + config.n.length) == nameList.length;
 			},
 
 			getWinners: function() {
@@ -88,17 +115,21 @@ angular.module('lottoryApp')
 			},
 
 			getConfig: function() {
-				var data = fs.readFileSync(configPath);
-				return JSON.parse(data);
+				config = JSON.parse(fs.readFileSync(configPath));
+				console.log(config)
+				return config;
 			},
 
 			setConfig: function(dWinners, nWinners) {
-				var dlist = dWinners.split(',');
-				var nlist = nWinners.split(',');
-				console.log(fs.writeFile(configPath, JSON.stringify({
-					d: dlist,
+				var dlist1 = dWinners[0].split(','),
+					dlist2 = dWinners[1].split(','),
+					dlist3 = dWinners[2].split(','),
+					nlist = nWinners.split(',');
+				config = {
+					d: [dlist1, dlist2, dlist3],
 					n: nlist
-				})));
+				};
+				fs.writeFileSync(configPath, JSON.stringify(config));
 			}
 		}
 

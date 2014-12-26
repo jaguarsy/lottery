@@ -21,6 +21,11 @@ angular.module('lottoryApp')
 				$interval.cancel(timeoutId);
 			});
 
+			var showMsg = function(msg) {
+				scope.message = msg;
+				$('#messagebox').modal();
+			}
+
 			var start = function() {
 				timeoutId = $interval(function() {
 					if (isbegin)
@@ -30,17 +35,18 @@ angular.module('lottoryApp')
 
 			var stop = function() {
 				$interval.cancel(timeoutId);
+				//先获取默认的
+				var name = lottery.getDefaultName(scope.current - 1);
+				if (name) element.text(name)
 				scope.winner = element.text();
 				lottery.win(scope.winner, scope.current - 1);
 			}
 
 			scope.begin = function() {
 				if (!scope.isbegin && lottery.getCount() == 0) {
-					scope.message = "请先导入抽奖名单";
-					$('#messagebox').modal();
+					showMsg("请先导入抽奖名单");
 					return;
 				}
-
 				scope.isbegin = !scope.isbegin;
 
 				if (scope.isbegin) {
@@ -49,7 +55,6 @@ angular.module('lottoryApp')
 					stop();
 				}
 				scope.text = scope.isbegin ? '结束抽奖' : '开始抽奖'
-
 			}
 		}
 
@@ -81,14 +86,22 @@ angular.module('lottoryApp')
 		'$interval',
 		function($scope, lottery, $interval) {
 
-			var timeoutId;
+			var timeoutId,
+				loadconfig = lottery.getConfig();
 
 			$scope.isbegin = false;
 			$scope.list = [];
 			$scope.winners = lottery.getWinners();
 			$scope.current = 1;
 			$scope.awards = [];
-
+			$scope.showconfig = {
+				defaultWinners: [
+					loadconfig.d[0].join(','),
+					loadconfig.d[1].join(','),
+					loadconfig.d[2].join(',')
+				],
+				neverWin: loadconfig.n.join(',')
+			};
 
 			for (var i = 1; i <= 3; i++) {
 				var name = lottery.getAwards(i);
@@ -120,10 +133,17 @@ angular.module('lottoryApp')
 				lottery.removeWinner($scope.targetName);
 			}
 
-			$scope.config = function() {
+			$scope.openconfig = function() {
 				$('#configbox').modal();
 			}
 
-			$scope.saveConfig = function() {}
+			$scope.saveConfig = function() {
+				lottery.setConfig($scope.showconfig.defaultWinners, $scope.showconfig.neverWin);
+			}
+
+			$scope.cancelConfig = function() {
+				$scope.showconfig.defaultWinners = [];
+				$scope.showconfig.neverWin = '';
+			}
 		}
 	])
