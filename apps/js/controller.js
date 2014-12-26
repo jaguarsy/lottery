@@ -86,22 +86,26 @@ angular.module('lottoryApp')
 		'$interval',
 		function($scope, lottery, $interval) {
 
-			var timeoutId,
-				loadconfig = lottery.getConfig();
+			var timeoutId;
+
+			var loadconfig = function() {
+				var conf = lottery.getConfig();
+				$scope.showconfig = {
+					defaultWinners: [
+						conf.d[0].join(','),
+						conf.d[1].join(','),
+						conf.d[2].join(',')
+					],
+					neverWin: conf.n.join(',')
+				};
+			}
+			loadconfig();
 
 			$scope.isbegin = false;
 			$scope.list = [];
 			$scope.winners = lottery.getWinners();
 			$scope.current = 1;
 			$scope.awards = [];
-			$scope.showconfig = {
-				defaultWinners: [
-					loadconfig.d[0].join(','),
-					loadconfig.d[1].join(','),
-					loadconfig.d[2].join(',')
-				],
-				neverWin: loadconfig.n.join(',')
-			};
 
 			for (var i = 1; i <= 3; i++) {
 				var name = lottery.getAwards(i);
@@ -142,8 +146,7 @@ angular.module('lottoryApp')
 			}
 
 			$scope.cancelConfig = function() {
-				$scope.showconfig.defaultWinners = [];
-				$scope.showconfig.neverWin = '';
+				loadconfig();
 			}
 		}
 	])

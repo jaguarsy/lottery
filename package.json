@@ -3,11 +3,12 @@
   "main": "index.html",
   "window": {
     "title": "lottery",
-    "toolbar": true,
+    "toolbar": false,
     "frame": false,
     "fullscreen": false,
     "position": "center",
     "width": 980,
-    "height": 700
+    "height": 700,
+    "icon": "public/image/icon.ico"
   }
 }

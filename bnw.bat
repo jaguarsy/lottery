@@ -14,7 +14,7 @@ echo %nwpath%icudtl.dat icudtl.dat
 echo Create build directory.
 mkdir build
 echo Building...
-copy /b %nwpath%nw.exe+my-app.nw build\my-app.exe
+copy /b %nwpath%nw.exe+my-app.nw build\lottery.exe
 copy nw.pak build\nw.pak
 copy icudtl.dat build\icudtl.dat
 echo Delete files.

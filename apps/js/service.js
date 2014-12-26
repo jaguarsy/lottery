@@ -115,8 +115,20 @@ angular.module('lottoryApp')
 			},
 
 			getConfig: function() {
-				config = JSON.parse(fs.readFileSync(configPath));
-				console.log(config)
+				var file = fs.readFileSync(configPath);
+				try {
+					config = JSON.parse(file);
+				} catch (e) {
+					config = {
+						d: [
+							[],
+							[],
+							[]
+						],
+						n: []
+					}
+				}
+
 				return config;
 			},
 

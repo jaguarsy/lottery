@@ -17,12 +17,14 @@
 </head>
 <body ng-cloak ng-controller="mainController">
     <div class='title'>
+        <div style="float:left;margin:7px 0 0 10px">
+            <a href="javascript:void(0)" data-am-offcanvas="{target: '#menubar'}">
+                <span class="am-icon-list"></span>
+            </a>
+        </div>
         <div class="menupanel">
             <a href="#" ng-click="close()" title="close">
                 <span class="am-icon-close"></span>
-                <a href="javascript:void(0)" data-am-offcanvas="{target: '#menubar'}">
-                    <span class="am-icon-list"></span>
-                </a>
             </a>
         </div>
     </div>
@@ -88,7 +90,7 @@
         </div>
     </div>
     <div id="menubar" class="am-offcanvas">
-        <div class="amz-sidebar am-offcanvas-bar am-offcanvas-bar-flip">
+        <div class="amz-sidebar am-offcanvas-bar ">
             <form class="am-form">
                 <fieldset>
                     <legend>

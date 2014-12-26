@@ -9,11 +9,11 @@
     height: 40px;
 }
 
-.titlepanel{
+/*.titlepanel{
     float: left;
     margin-top: 7px;
     margin-left: 10px;
-}
+}*/
 
 .menupanel{
     float: right;
@@ -30,7 +30,7 @@
 }
 
 #menubar > div{
-	width: 200px;
+	width: 220px;
 	background-color: #eeeeee;
 	overflow: hidden;
 	border-left-color: #eeeeee;
