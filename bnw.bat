@@ -1,5 +1,5 @@
 @echo off
-set nwpath=D:\Products\[Resource]\node-webkit\
+set nwpath=D:\node-webkit\
 if not exist "package.json" (
  echo Can't find package.json, run bat in project's directory.
  exit /B
