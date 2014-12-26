@@ -101,6 +101,7 @@ angular.module('lottoryApp')
 					var index = winners[i].indexOf(name)
 					if (index > -1) {
 						winners[i].splice(index, 1);
+						winnerindex.splice(winnerindex.indexOf(name), 1);
 						return;
 					}
 				}

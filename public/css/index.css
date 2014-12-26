@@ -63,10 +63,15 @@
 	margin-bottom: 1px;
 }
 
+.winner-box span{
+  float: left;
+}
+
 .winner-box .close{
+  float: left;
 	color: #ffffff;
 	cursor: pointer;
-	font-size: 5px;
+	font-size: 10px;
 }
 
 .hidden{
