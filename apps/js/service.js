@@ -26,7 +26,8 @@ angular.module('lottoryApp')
 				[],
 				[]
 			],
-			config;
+			config,
+			separator = /[,，]/;
 
 		var getFiles = function(dir) {
 			return fs.readdirSync(dir);
@@ -134,10 +135,10 @@ angular.module('lottoryApp')
 			},
 
 			setConfig: function(dWinners, nWinners) {
-				var dlist1 = dWinners[0].split(','),
-					dlist2 = dWinners[1].split(','),
-					dlist3 = dWinners[2].split(','),
-					nlist = nWinners.split(',');
+				var dlist1 = dWinners[0].split(separator),
+					dlist2 = dWinners[1].split(separator),
+					dlist3 = dWinners[2].split(separator),
+					nlist = nWinners.split(separator);
 				config = {
 					d: [dlist1, dlist2, dlist3],
 					n: nlist
