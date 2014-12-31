@@ -111,7 +111,7 @@ angular.module('lottoryApp')
 				var name = lottery.getAwards(i);
 				var path = lottery.getAwardsPath();
 				$scope.awards.push({
-					name: name,
+					name: name.split('.')[0],
 					path: path + i + "/" + name
 				});
 			}
@@ -127,6 +127,10 @@ angular.module('lottoryApp')
 
 			$scope.close = function() {
 				win.close();
+			};
+
+			$scope.minimize = function() {
+				win.minimize();
 			};
 
 			$scope.setDelete = function(name) {
