@@ -9,37 +9,62 @@ angular.module('lottoryApp')
 	.factory('lottery', [function() {
 
 		var nameList,
-			name,
+			person,
 			rand,
 			count = 0,
 			awardsPath = execPath + "/awards/",
 			configPath = execPath + "/config",
-			winnerindex = [],
-			winners = [
-				[],
-				[],
-				[]
-			],
-			neverWinners = [],
-			defaultWinners = [
-				[],
-				[],
-				[]
-			],
-			config,
+			winners,
+			turnConfig = [{
+				turnCount: 1,
+				number: 1
+			}, {
+				turnCount: 1,
+				number: 1
+			}, {
+				turnCount: 2,
+				number: 1
+			}, {
+				turnCount: 3,
+				number: 1
+			}, {
+				turnCount: 2,
+				number: 3
+			}, {
+				turnCount: 2,
+				number: 4
+			}, {
+				turnCount: 3,
+				number: 5
+			}, {
+				turnCount: 2,
+				number: 25
+			}, ],
 			separator = /[,，]/;
 
 		var getFiles = function(dir) {
 			return fs.readdirSync(dir);
 		};
 
+		var trim = function(str){
+			return str.replace(/(^\s*)|(\s*$)/g,"");
+		}
+
 		return {
 			loadList: function(filename, callback) {
 				var sheet = XLSX.readFile(filename).Sheets.Sheet1;
-				nameList = []
-				for (var index in sheet) {
-					if (sheet[index].w)
-						nameList.push(sheet[index].w)
+				nameList = [];
+
+				for (var i = 2;; i++) {
+					if (!sheet['A' + i]){
+						break;
+					}
+					nameList.push({
+						name: trim(sheet['A' + i].w),
+						isIn: trim(sheet['B' + i].w) == 'y',
+						aClass: sheet['C' + i] ? trim(sheet['C' + i].w) : -1,
+						awardIndex: sheet['D' + i] ? trim(sheet['D' + i].w) : -1
+					})
 				}
 				count = nameList.length;
 				return nameList;
@@ -57,55 +82,59 @@ angular.module('lottoryApp')
 				return count;
 			},
 
-			getOneName: function() {
+			getOneName: function(isIn) {
 				rand = this.rand(count);
 				for (var i = 0; i < 50; i++) {
-					name = nameList[rand];
-					if (winnerindex.indexOf(name) < 0 && //排除已获奖的人
-						config.n.indexOf(name) < 0) { //获奖人不在禁止获奖名单中
-						return name;
+					person = nameList[rand];
+					if (person && (!isIn || person.isIn)) {
+						if (isIn) {
+							var name = person.name;
+							nameList.splice(rand, 1);
+							return name;
+						} else {
+							return person.name;
+						}
 					}
 					rand = this.rand(count);
 				}
 				return '';
 			},
-			//获取默认的winner
-			getDefaultName: function(aClass) {
-				for (var i = 0, len = config.d[aClass].length; i < len; i++) {
-					name = config.d[aClass][i];
-					if (!name || name.trim() == '') continue;
-					if (winnerindex.indexOf(name) < 0 && //排除已获奖的人
-						config.n.indexOf(name) < 0) { //获奖人不在禁止获奖名单中
-						return name;
+
+			getNames: function(aClass, turn) {
+				var list = [],
+					length = turnConfig[aClass].number;
+
+				//先加载默认获奖的人
+				for (var i = 0, len = nameList.length; i < len; i++) {
+					if (!nameList[i]) break;
+
+					if (nameList[i].aClass == aClass &&
+						nameList[i].isIn &&
+						nameList[i].awardIndex == turn) {
+						var tmpName = nameList[i].name;
+						list.push(tmpName);
+						nameList.splice(i, 1); //删除这个人
+						count--; len--; i--;
 					}
 				}
+				length = length - list.length;
+
+				//随机获取获奖人
+				for (var i = 0; i < length; i++) {
+					var tmpName = this.getOneName(true)
+					list.push(tmpName);
+					count--;
+				}
+				return list;
+			},
+
+			//获取默认的winner
+			getDefaultName: function(aClass) {
 				return undefined;
 			},
 
-			win: function(name, aClass) {
-				if (this.isEnd()) return;
-				winnerindex.push(name);
-				winners[aClass].push(name);
-				return winners;
-			},
-
 			isEnd: function() {
-				return (+winnerindex.length + config.n.length) == nameList.length;
-			},
-
-			getWinners: function() {
-				return winners;
-			},
-
-			removeWinner: function(name) {
-				for (var i = 0, len = winners.length; i < len; i++) {
-					var index = winners[i].indexOf(name)
-					if (index > -1) {
-						winners[i].splice(index, 1);
-						winnerindex.splice(winnerindex.indexOf(name), 1);
-						return;
-					}
-				}
+				return nameList.length == 0;
 			},
 
 			getAwardsPath: function() {
@@ -113,37 +142,11 @@ angular.module('lottoryApp')
 			},
 
 			getAwards: function(aClass) {
-				return getFiles(awardsPath + aClass)[0];
+				return getFiles(awardsPath + aClass);
 			},
 
-			getConfig: function() {
-				var file = fs.readFileSync(configPath);
-				try {
-					config = JSON.parse(file);
-				} catch (e) {
-					config = {
-						d: [
-							[],
-							[],
-							[]
-						],
-						n: []
-					}
-				}
-
-				return config;
-			},
-
-			setConfig: function(dWinners, nWinners) {
-				var dlist1 = dWinners[0].split(separator),
-					dlist2 = dWinners[1].split(separator),
-					dlist3 = dWinners[2].split(separator),
-					nlist = nWinners.split(separator);
-				config = {
-					d: [dlist1, dlist2, dlist3],
-					n: nlist
-				};
-				fs.writeFileSync(configPath, JSON.stringify(config));
+			getTurn: function(aClass){
+				return turnConfig[aClass];
 			}
 		}
 

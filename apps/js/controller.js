@@ -34,12 +34,10 @@ angular.module('lottoryApp')
 			}
 
 			var stop = function() {
-				$interval.cancel(timeoutId);
-				//先获取默认的
-				var name = lottery.getDefaultName(scope.current - 1);
-				if (name) element.text(name)
-				scope.winner = element.text();
-				lottery.win(scope.winner, scope.current - 1);
+				var list = lottery.getNames(scope.current - 1, scope.turn);
+				scope.winners = list;
+				element.text(list[list.length - 1]);
+				scope.turn++;
 			}
 
 			scope.begin = function() {
@@ -64,15 +62,12 @@ angular.module('lottoryApp')
 	}])
 	.directive('showAwardClass', [function() {
 
+		var awardsName = ["特等奖", "一等奖", "二等奖", "三等奖", "四等奖", "五等奖", "六等奖", "七等奖"];
+
 		function link(scope, element, attrs) {
 
 			scope.$watch(attrs.showAwardClass, function(value) {
-				if (value == '1')
-					element.text('一等奖');
-				else if (value == '2')
-					element.text('二等奖');
-				else if (value == '3')
-					element.text('三等奖');
+				element.text(awardsName[value - 1]);
 			});
 		}
 
@@ -88,39 +83,34 @@ angular.module('lottoryApp')
 
 			var timeoutId;
 
-			var loadconfig = function() {
-				var conf = lottery.getConfig();
-				$scope.showconfig = {
-					defaultWinners: [
-						conf.d[0].join(','),
-						conf.d[1].join(','),
-						conf.d[2].join(',')
-					],
-					neverWin: conf.n.join(',')
-				};
-			}
-			loadconfig();
-
 			$scope.isbegin = false;
 			$scope.list = [];
-			$scope.winners = lottery.getWinners();
-			$scope.current = 1;
+			$scope.current = 8;
+			$scope.turn = 0;
 			$scope.awards = [];
+			$scope.turnDetail = lottery.getTurn($scope.current - 1);
 
-			for (var i = 1; i <= 3; i++) {
-				var name = lottery.getAwards(i);
+			//显示奖品
+			for (var i = 0; i <= 7; i++) {
+				var names = lottery.getAwards(i);
 				var path = lottery.getAwardsPath();
-				$scope.awards.push({
-					name: name.split('.')[0],
-					path: path + i + "/" + name
-				});
+				var awards = [];
+
+				for (var j = 0, len = names.length; j < len; j++) {
+					awards.push({
+						name: names[j].split('.')[0].split('-')[1],
+						path: path + i + "/" + names[j]
+					})
+				}
+
+				$scope.awards.push(awards);
 			}
 
+			//全屏
 			win.toggleKioskMode();
 
 			$scope.import = function() {
 				$scope.list = lottery.loadList($('#fileDialog').val());
-
 				$scope.message = $scope.list.length > 0 ? "导入成功！" : "导入失败。";
 				$('#messagebox').modal();
 			};
@@ -133,24 +123,16 @@ angular.module('lottoryApp')
 				win.minimize();
 			};
 
-			$scope.setDelete = function(name) {
-				$scope.targetName = name;
-			};
-
-			$scope.remove = function() {
-				lottery.removeWinner($scope.targetName);
+			$scope.nextTurn = function() {
+				console.log($scope.turnDetail.turnCount , $scope.turn+1)
+				if ($scope.turnDetail.turnCount <= $scope.turn+1) return;
+				$scope.turn++;
 			}
 
-			$scope.openconfig = function() {
-				$('#configbox').modal();
-			}
-
-			$scope.saveConfig = function() {
-				lottery.setConfig($scope.showconfig.defaultWinners, $scope.showconfig.neverWin);
-			}
-
-			$scope.cancelConfig = function() {
-				loadconfig();
+			$scope.change = function(){
+				$scope.turn=0;
+				$scope.winners=[];
+				$scope.turnDetail = lottery.getTurn($scope.current - 1);
 			}
 		}
 	])

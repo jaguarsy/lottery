@@ -41,11 +41,13 @@
 			<div class="am-u-lg-6">
 				<p>
 					奖品:
-					<span ng-bind="awards[current-1].name"></span>
+					<span ng-bind="awards[current-1][turn].name"></span>
+					<a href="javascript:void(0)" ng-click="nextTurn()">下一轮奖品</a>
 				</p>
 				<p>
-					<img ng-src="{{awards[current-1].path}}" style="max-height:350px" alt="一等奖" class="am-img-thumbnail am-radius"></div>
-			</p>
+					<img ng-src="{{awards[current-1][turn].path}}" style="max-height:350px" class="am-img-thumbnail am-radius">
+				</p>
+			</div>
 			<div class="am-u-lg-6 right">
 				<h2 class="center lottory-name"> <strong show-name="isbegin" ng-model="winner">XXX</strong>
 				</h2>
@@ -66,30 +68,12 @@
 		<div class="am-g">
 			<div class="am-u-lg-12 awardsbox">
 				<div class="winners">
-					<h3>一等奖：</h3>
-					<div class="winner-box" ng-cloak ng-repeat="name in winners[0]">
+					<h3>
+						<span show-award-class="current"></span>
+						获奖人名单：
+					</h3>
+					<div class="winner-box" ng-cloak ng-repeat="name in winners">
 						<span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
-						<a class="close" data-am-modal="{target: '#delete-confirm'}" ng-click="setDelete(name)">
-							<span class="am-icon-times"></span>
-						</a>
-					</div>
-				</div>
-				<div class="winners">
-					<h3>二等奖：</h3>
-					<div class="winner-box" ng-cloak ng-repeat="name in winners[1]">
-						<span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
-						<a class="close" data-am-modal="{target: '#delete-confirm'}" ng-click="setDelete(name)">
-							<span class="am-icon-times"></span>
-						</a>
-					</div>
-				</div>
-				<div class="winners">
-					<h3>三等奖：</h3>
-					<div class="winner-box" ng-cloak ng-repeat="name in winners[2]">
-						<span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
-						<a class="close" data-am-modal="{target: '#delete-confirm'}" ng-click="setDelete(name)">
-							<span class="am-icon-times"></span>
-						</a>
 					</div>
 				</div>
 			</div>
@@ -115,12 +99,22 @@
 						<small>选择抽奖轮次</small>
 					</legend>
 					<div class="am-form-group">
-						<input id="first" type="radio" class="ainput hidden" ng-model="current" value="1"/>
-						<label for="first" class="alabel">一等奖</label>
-						<input id="second" type="radio" class="ainput hidden"  ng-model="current" value="2"/>
-						<label for="second" class="alabel">二等奖</label>
-						<input id="three" type="radio" class="ainput hidden"  ng-model="current" value="3"/>
-						<label for="three" class="alabel">三等奖</label>
+						<input id="award0" type="radio" class="ainput hidden" ng-model="current" value="1" ng-click="change()"/>
+						<label for="award0" class="alabel">特等奖</label>
+						<input id="award1" type="radio" class="ainput hidden" ng-model="current" value="2" ng-click="turn=0;winners=[]"/>
+						<label for="award1" class="alabel">一等奖</label>
+						<input id="award2" type="radio" class="ainput hidden" ng-model="current" value="3" ng-click="turn=0;winners=[]"/>
+						<label for="award2" class="alabel">二等奖</label>
+						<input id="award3" type="radio" class="ainput hidden" ng-model="current" value="4" ng-click="turn=0;winners=[]"/>
+						<label for="award3" class="alabel">三等奖</label>
+						<input id="award4" type="radio" class="ainput hidden" ng-model="current" value="5" ng-click="turn=0;winners=[]"/>
+						<label for="award4" class="alabel">四等奖</label>
+						<input id="award5" type="radio" class="ainput hidden" ng-model="current" value="6" ng-click="turn=0;winners=[]"/>
+						<label for="award5" class="alabel">五等奖</label>
+						<input id="award6" type="radio" class="ainput hidden" ng-model="current" value="7" ng-click="turn=0;winners=[]"/>
+						<label for="award6" class="alabel">六等奖</label>
+						<input id="award7" type="radio" class="ainput hidden" ng-model="current" value="8" ng-click="turn=0;winners=[]"/>
+						<label for="award7" class="alabel">七等奖</label>
 					</div>
 				</fieldset>
 			</form>
@@ -133,35 +127,6 @@
 			<div class="am-modal-bd" ng-bind="message"></div>
 			<div class="am-modal-footer">
 				<span class="am-modal-btn">确定</span>
-			</div>
-		</div>
-	</div>
-	<div class="am-modal am-modal-confirm" tabindex="-1" id="delete-confirm">
-		<div class="am-modal-dialog">
-			<div class="am-modal-hd">确认提示</div>
-			<div class="am-modal-bd">确定删除该获奖人?</div>
-			<div class="am-modal-footer">
-				<span class="am-modal-btn">取消</span>
-				<span class="am-modal-btn" ng-click="remove()">确认</span>
-			</div>
-		</div>
-	</div>
-	<div class="am-modal am-modal-prompt" tabindex="-1" id="configbox">
-		<div class="am-modal-dialog">
-			<div class="am-modal-hd">Amaze UI</div>
-			<div class="am-modal-bd">
-				一等奖
-				<input type="text" class="am-modal-prompt-input" ng-model="showconfig.defaultWinners[0]"/>
-				二等奖
-				<input type="text" class="am-modal-prompt-input" ng-model="showconfig.defaultWinners[1]"/>
-				三等奖
-				<input type="text" class="am-modal-prompt-input" ng-model="showconfig.defaultWinners[2]"/>
-				禁止获奖
-				<input type="text" class="am-modal-prompt-input" ng-model="showconfig.neverWin"/>
-			</div>
-			<div class="am-modal-footer">
-				<span class="am-modal-btn" data-am-modal-cancel ng-click="cancelConfig()">取消</span>
-				<span class="am-modal-btn" data-am-modal-confirm ng-click="saveConfig()">提交</span>
 			</div>
 		</div>
 	</div>
