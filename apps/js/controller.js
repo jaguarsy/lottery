@@ -7,7 +7,8 @@ angular.module('lottoryApp')
 
 		function link(scope, element, attrs) {
 			var timeoutId,
-				isbegin;
+				isbegin,
+				startLimit = [1, 1, 2, 3, 2, 2, 3, 2]; //每一项奖品抽奖次数的限制
 
 			function updateTime() {
 				element.text(lottery.getOneName());
@@ -27,6 +28,8 @@ angular.module('lottoryApp')
 			}
 
 			var start = function() {
+				scope.winners = [];
+				scope.startCount++;
 				timeoutId = $interval(function() {
 					if (isbegin)
 						updateTime();
@@ -37,7 +40,9 @@ angular.module('lottoryApp')
 				var list = lottery.getNames(scope.current - 1, scope.turn);
 				scope.winners = list;
 				element.text(list[list.length - 1]);
-				scope.turn++;
+				if (startLimit[scope.current - 1] == scope.startCount) {
+					scope.startEnable = false;
+				}
 			}
 
 			scope.begin = function() {
@@ -81,7 +86,8 @@ angular.module('lottoryApp')
 		'$interval',
 		function($scope, lottery, $interval) {
 
-			var timeoutId;
+			var timeoutId,
+				awardsPath = execPath + "/awards/";
 
 			$scope.isbegin = false;
 			$scope.list = [];
@@ -89,6 +95,8 @@ angular.module('lottoryApp')
 			$scope.turn = 0;
 			$scope.awards = [];
 			$scope.turnDetail = lottery.getTurn($scope.current - 1);
+			$scope.startCount = 0;
+			$scope.startEnable = true;
 
 			//显示奖品
 			for (var i = 0; i <= 7; i++) {
@@ -109,11 +117,11 @@ angular.module('lottoryApp')
 			//全屏
 			win.toggleKioskMode();
 
-			$scope.import = function() {
-				$scope.list = lottery.loadList($('#fileDialog').val());
-				$scope.message = $scope.list.length > 0 ? "导入成功！" : "导入失败。";
-				$('#messagebox').modal();
-			};
+			//$scope.import = function() {
+			$scope.list = lottery.loadList(awardsPath + "data.xlsx");
+			// $scope.message = $scope.list.length > 0 ? "导入成功！" : "导入失败。";
+			// $('#messagebox').modal();
+			//};
 
 			$scope.close = function() {
 				win.close();
@@ -124,14 +132,15 @@ angular.module('lottoryApp')
 			};
 
 			$scope.nextTurn = function() {
-				console.log($scope.turnDetail.turnCount , $scope.turn+1)
-				if ($scope.turnDetail.turnCount <= $scope.turn+1) return;
+				if ($scope.turnDetail.turnCount <= $scope.turn + 1) return;
 				$scope.turn++;
 			}
 
-			$scope.change = function(){
-				$scope.turn=0;
-				$scope.winners=[];
+			$scope.change = function() {
+				$scope.turn = 0;
+				$scope.startCount = 0;
+				$scope.winners = [];
+				$scope.startEnable = true;
 				$scope.turnDetail = lottery.getTurn($scope.current - 1);
 			}
 		}

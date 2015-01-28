@@ -33,47 +33,44 @@
 	</div>
 	<div class="am-container">
 		<div class="am-g">
-			<div class="am-u-lg-12">
-				<h1 class="center"> <strong show-award-class="current">一等奖</strong>
+			<div class="am-u-lg-12" style="position:relative">
+				<h1 class="center" style="font-size:80px;margin-bottom:0px"> <strong show-award-class="current">一等奖</strong>
 				</h1>
-				<hr/>
 			</div>
+		</div>
+		<div class="am-g">
 			<div class="am-u-lg-6">
+				<h1 style="font-size:36px"> <strong>奖品：</strong>
+					<strong ng-bind="awards[current-1][turn].name"></strong>
+					<a style="font-size:12px" href="javascript:void(0)" ng-click="nextTurn()">下一轮奖品</a>
+				</h1>
 				<p>
-					奖品:
-					<span ng-bind="awards[current-1][turn].name"></span>
-					<a href="javascript:void(0)" ng-click="nextTurn()">下一轮奖品</a>
-				</p>
-				<p>
-					<img ng-src="{{awards[current-1][turn].path}}" style="max-height:350px" class="am-img-thumbnail am-radius">
-				</p>
+					<img ng-src="{{awards[current-1][turn].path}}" style="height:400px" class="am-img-thumbnail am-radius"></p>
 			</div>
 			<div class="am-u-lg-6 right">
-				<h2 class="center lottory-name"> <strong show-name="isbegin" ng-model="winner">XXX</strong>
+				<h2 class="center lottory-name">
+					<strong show-name="isbegin" ng-model="winner">XXX</strong>
 				</h2>
 			</div>
 		</div>
 		<div class="am-g">
 			<div class="am-u-lg-12">
-				<p class="center">
-					当前共有
-					<span ng-bind="list.length">0</span>
-					人参与抽奖。
+				<p class="center" style="margin-bottom:5px">
 					<button type="button" class="am-btn am-btn-danger am-btn-xs" ng-click="begin()" 
-                        ng-init="text='开始抽奖'"
+                        ng-init="text='开始抽奖'" ng-disabled="!startEnable"
                         ng-bind="text"></button>
 				</p>
 			</div>
 		</div>
 		<div class="am-g">
 			<div class="am-u-lg-12 awardsbox">
+				<h1 style="margin-bottom:5px">
+					<strong><span show-award-class="current"></span>
+						获奖人名单：</strong> 
+				</h1>
 				<div class="winners">
-					<h3>
-						<span show-award-class="current"></span>
-						获奖人名单：
-					</h3>
 					<div class="winner-box" ng-cloak ng-repeat="name in winners">
-						<span class="am-badge am-badge-primary am-text-xl" ng-bind="name"></span>
+						<span ng-bind="name"></span>
 					</div>
 				</div>
 			</div>
@@ -83,58 +80,56 @@
 		<div class="amz-sidebar am-offcanvas-bar ">
 			<form class="am-form">
 				<fieldset>
-					<legend>
-						<small>导入抽奖名单</small>
-						<a href="#" ng-click="openconfig()">
-							<small> <i class="am-icon-cog"></i>
-							</small>
-						</a>
-					</legend>
-					<div class="am-form-group">
-						<input id="fileDialog" type="file" style="font-size:12px"/>
-						<p class="am-form-help">请选择抽奖人名单</p>
-						<button type="button" class="am-btn am-btn-danger am-btn-xs" ng-click="import()">导入</button>
-					</div>
-					<legend>
-						<small>选择抽奖轮次</small>
-					</legend>
-					<div class="am-form-group">
-						<input id="award0" type="radio" class="ainput hidden" ng-model="current" value="1" ng-click="change()"/>
-						<label for="award0" class="alabel">特等奖</label>
-						<input id="award1" type="radio" class="ainput hidden" ng-model="current" value="2" ng-click="turn=0;winners=[]"/>
-						<label for="award1" class="alabel">一等奖</label>
-						<input id="award2" type="radio" class="ainput hidden" ng-model="current" value="3" ng-click="turn=0;winners=[]"/>
-						<label for="award2" class="alabel">二等奖</label>
-						<input id="award3" type="radio" class="ainput hidden" ng-model="current" value="4" ng-click="turn=0;winners=[]"/>
-						<label for="award3" class="alabel">三等奖</label>
-						<input id="award4" type="radio" class="ainput hidden" ng-model="current" value="5" ng-click="turn=0;winners=[]"/>
-						<label for="award4" class="alabel">四等奖</label>
-						<input id="award5" type="radio" class="ainput hidden" ng-model="current" value="6" ng-click="turn=0;winners=[]"/>
-						<label for="award5" class="alabel">五等奖</label>
-						<input id="award6" type="radio" class="ainput hidden" ng-model="current" value="7" ng-click="turn=0;winners=[]"/>
-						<label for="award6" class="alabel">六等奖</label>
-						<input id="award7" type="radio" class="ainput hidden" ng-model="current" value="8" ng-click="turn=0;winners=[]"/>
-						<label for="award7" class="alabel">七等奖</label>
-					</div>
-				</fieldset>
-			</form>
-		</div>
+					<!-- <legend>
+					<small>导入抽奖名单</small>
+				</legend>
+				<div class="am-form-group">
+					<input id="fileDialog" type="file" style="font-size:12px"/>
+					<p class="am-form-help">请选择抽奖人名单</p>
+					<button type="button" class="am-btn am-btn-danger am-btn-xs" ng-click="import()">导入</button>
+				</div>
+				-->
+				<legend>
+					<small>选择抽奖轮次</small>
+				</legend>
+				<div class="am-form-group">
+					<input id="award0" type="radio" class="ainput hidden" ng-model="current" value="1" ng-click="change()"/>
+					<label for="award0" class="alabel">特等奖</label>
+					<input id="award1" type="radio" class="ainput hidden" ng-model="current" value="2" ng-click="change()"/>
+					<label for="award1" class="alabel">一等奖</label>
+					<input id="award2" type="radio" class="ainput hidden" ng-model="current" value="3" ng-click="change()"/>
+					<label for="award2" class="alabel">二等奖</label>
+					<input id="award3" type="radio" class="ainput hidden" ng-model="current" value="4" ng-click="change()"/>
+					<label for="award3" class="alabel">三等奖</label>
+					<input id="award4" type="radio" class="ainput hidden" ng-model="current" value="5" ng-click="change()"/>
+					<label for="award4" class="alabel">四等奖</label>
+					<input id="award5" type="radio" class="ainput hidden" ng-model="current" value="6" ng-click="change()"/>
+					<label for="award5" class="alabel">五等奖</label>
+					<input id="award6" type="radio" class="ainput hidden" ng-model="current" value="7" ng-click="change()"/>
+					<label for="award6" class="alabel">六等奖</label>
+					<input id="award7" type="radio" class="ainput hidden" ng-model="current" value="8" ng-click="change()"/>
+					<label for="award7" class="alabel">七等奖</label>
+					<div style="clear:both"></div>
+				</div>
+			</fieldset>
+		</form>
 	</div>
+</div>
 
-	<div class="am-modal am-modal-alert" tabindex="-1" id="messagebox">
-		<div class="am-modal-dialog">
-			<div class="am-modal-hd">提示</div>
-			<div class="am-modal-bd" ng-bind="message"></div>
-			<div class="am-modal-footer">
-				<span class="am-modal-btn">确定</span>
-			</div>
+<div class="am-modal am-modal-alert" tabindex="-1" id="messagebox">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">提示</div>
+		<div class="am-modal-bd" ng-bind="message"></div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn">确定</span>
 		</div>
 	</div>
-	<script type="text/javascript" src="public/js/jquery.min.js"></script>
-	<script type="text/javascript" src="public/js/amazeui.min.js"></script>
-	<script type="text/javascript" src="public/js/angular.min.js"></script>
-	<script type="text/javascript" src="apps/js/app.js"></script>
-	<script type="text/javascript" src="apps/js/service.js"></script>
-	<script type="text/javascript" src="apps/js/controller.js"></script>
+</div>
+<script type="text/javascript" src="public/js/jquery.min.js"></script>
+<script type="text/javascript" src="public/js/amazeui.min.js"></script>
+<script type="text/javascript" src="public/js/angular.min.js"></script>
+<script type="text/javascript" src="apps/js/app.js"></script>
+<script type="text/javascript" src="apps/js/service.js"></script>
+<script type="text/javascript" src="apps/js/controller.js"></script>
 </body>
 </html>

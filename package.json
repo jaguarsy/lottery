@@ -3,7 +3,7 @@
   "main": "index.html",
   "window": {
     "title": "lottery",
-    "toolbar": true,
+    "toolbar": false,
     "frame": false,
     "fullscreen": false,
     "position": "center",
